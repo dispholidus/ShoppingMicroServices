@@ -22,6 +22,7 @@ namespace ShoppingMicroservices.Controller.Api
             var allproducts = _productRepository.AllProducts;
             return Ok(allproducts);
         }
+
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
@@ -29,6 +30,7 @@ namespace ShoppingMicroservices.Controller.Api
                 return NotFound();
             return Ok(_productRepository.AllProducts.FirstOrDefault(p => p.ProductId == id));
         }
+
         [HttpGet("{id}/{exchangeName}")]
         public IActionResult GetPrice(int id, string exchangeName)
         {

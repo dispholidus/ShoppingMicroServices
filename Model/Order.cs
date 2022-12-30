@@ -6,6 +6,7 @@
         public int ProductId { get; set; }
         public DateTime OrderDate { get; set; }
         public int OrderQuantity { get; set; }
+        public string? ExchangeRateName { get; set; }
 
     }
 }

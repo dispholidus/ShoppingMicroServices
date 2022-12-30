@@ -20,7 +20,7 @@ namespace ShoppingMicroservices.Controller.Api
         public IActionResult GetAllOrders() => Ok(_orderRepository.GetAll());
 
         [HttpPost]
-        public IActionResult PlaceOrder(int productId, int quantity)
+        public IActionResult PlaceOrder(int productId, int quantity, string? exchangeRateName)
         {
             if (!_servicesDbContext.Products.Any(p => p.ProductId == productId))
             {
@@ -32,7 +32,7 @@ namespace ShoppingMicroservices.Controller.Api
                 return new JsonResult($"Not enough product in the inventory!");
             }
 
-            Order order = new Order { ProductId = productId, OrderQuantity = quantity, OrderDate = DateTime.Now };
+            Order order = new Order { ProductId = productId, OrderQuantity = quantity, OrderDate = DateTime.Now, ExchangeRateName = exchangeRateName };
             _servicesDbContext.Add(order);
             _servicesDbContext.SaveChanges();
 

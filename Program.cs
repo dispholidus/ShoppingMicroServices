@@ -4,7 +4,8 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration.GetConnectionString("ServicesDbContextConnection") ?? throw new InvalidOperationException("Connection string 'ServicesDbContextConnection' not found.");
+var connectionString = builder.Configuration.GetConnectionString("ServicesDbContextConnection") ??
+    throw new InvalidOperationException("Connection string 'ServicesDbContextConnection' not found.");
 
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
