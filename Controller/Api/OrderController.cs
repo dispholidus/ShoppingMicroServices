@@ -9,11 +9,16 @@ namespace ShoppingMicroservices.Controller.Api
     {
         private readonly IOrderRepository _orderRepository;
         private readonly ServicesDbContext _servicesDbContext;
+        private readonly NotificationController _notificationController;
+        private readonly InventoryController _inventoryController;
 
-        public OrderController(IOrderRepository orderRepository, ServicesDbContext servicesDbContext)
+        public OrderController(IOrderRepository orderRepository, ServicesDbContext servicesDbContext,
+            NotificationController notificationController, InventoryController inventoryController)
         {
             _orderRepository = orderRepository;
             _servicesDbContext = servicesDbContext;
+            _notificationController = notificationController;
+            _inventoryController = inventoryController;
         }
 
         [HttpGet]
@@ -31,12 +36,13 @@ namespace ShoppingMicroservices.Controller.Api
             {
                 return new JsonResult($"Not enough product in the inventory!");
             }
-
             Order order = new Order { ProductId = productId, OrderQuantity = quantity, OrderDate = DateTime.Now, ExchangeRateName = exchangeRateName };
+
+            _inventoryController.UpdateItem(order);
             _servicesDbContext.Add(order);
             _servicesDbContext.SaveChanges();
 
-            return new JsonResult($"Your order is placed. Order Id = {order.OrderId} Quantity = {quantity}");
+            return _notificationController.SendNotificationAsync(order);
         }
 
     }

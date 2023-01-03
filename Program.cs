@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using ShoppingMicroservices.Controller;
 using ShoppingMicroservices.Model;
 using System.Text.Json.Serialization;
 
@@ -11,6 +12,10 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IExchangeRateRepository, ExchangeRateRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<InventoryController, InventoryController>();
+builder.Services.AddScoped<NotificationController, NotificationController>();
+
+
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
