@@ -6,7 +6,7 @@ namespace ShoppingMicroservices.Controller
 {
     public class NotificationController : ControllerBase
     {
-        public ActionResult SendNotificationAsync(Order order)
+        public ActionResult SendNotification(Order order)
         {
             var message = order.ToString();
             return new JsonResult(message);
