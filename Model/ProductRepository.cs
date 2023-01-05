@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata.Ecma335;
 
 namespace ShoppingMicroservices.Model
 {
@@ -19,15 +20,28 @@ namespace ShoppingMicroservices.Model
             }
         }
 
-        public decimal GetPrice(int productId, string exchangeRateName)
+        public decimal GetPrice(int productId, string? exchangeRateName)
         {
-            decimal? price = _servicesDbContext.Products.FirstOrDefault(p => p.ProductId == productId)?.Price /
-                _exchangeRateRepository.GetExchangeRateByName(exchangeRateName)?.ExchangeRateValue;
-            if (price == null)
+            Product? product = _servicesDbContext.Products.FirstOrDefault(p => p.ProductId == productId);
+
+            if (product == null)
             {
-                return -1.0M;
+                return -1m;
             }
-            return (decimal)price;
+
+            if (exchangeRateName == null)
+            {
+                return product.Price;
+            }
+
+            ExchangeRate? exchangeRate = _servicesDbContext.ExchangeRates.FirstOrDefault(e => e.ExchangeRateName == exchangeRateName);
+
+            if (exchangeRate == null)
+            {
+                return -2m;
+            }
+
+            return product.Price / exchangeRate.ExchangeRateValue;
         }
 
         public Product? GetProductById(int productId)

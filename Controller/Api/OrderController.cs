@@ -8,17 +8,19 @@ namespace ShoppingMicroservices.Controller.Api
     public class OrderController : ControllerBase
     {
         private readonly IOrderRepository _orderRepository;
+        private readonly IProductRepository _productRepository;
         private readonly ServicesDbContext _servicesDbContext;
         private readonly NotificationController _notificationController;
         private readonly InventoryController _inventoryController;
 
         public OrderController(IOrderRepository orderRepository, ServicesDbContext servicesDbContext,
-            NotificationController notificationController, InventoryController inventoryController)
+            NotificationController notificationController, InventoryController inventoryController, IProductRepository productRepository)
         {
             _orderRepository = orderRepository;
             _servicesDbContext = servicesDbContext;
             _notificationController = notificationController;
             _inventoryController = inventoryController;
+            _productRepository = productRepository;
         }
 
         [HttpGet]
@@ -36,7 +38,14 @@ namespace ShoppingMicroservices.Controller.Api
             {
                 return new JsonResult($"Not enough product in the inventory!");
             }
-            Order order = new Order { ProductId = productId, OrderQuantity = quantity, OrderDate = DateTime.Now, ExchangeRateName = exchangeRateName };
+
+            decimal price = _productRepository.GetPrice(productId, exchangeRateName);
+            if (price == -2m && price == -1m)
+            {
+                return NotFound();
+            }
+
+            Order order = new Order { ProductId = productId, OrderQuantity = quantity, OrderDate = DateTime.Now, ExchangeRateName = exchangeRateName, Price = price };
 
             _inventoryController.UpdateItem(order);
             _servicesDbContext.Add(order);

@@ -34,9 +34,13 @@ namespace ShoppingMicroservices.Controller.Api
         [HttpGet("{id}/{exchangeName}")]
         public IActionResult GetPrice(int id, string exchangeName)
         {
-            if (!_productRepository.AllProducts.Any(p => p.ProductId == id))
-                return NotFound();
             decimal price = _productRepository.GetPrice(id, exchangeName);
+
+            if (price == -2m && price == -1m)
+            {
+                return NotFound();
+            }
+
             return Ok(price);
         }
     }
