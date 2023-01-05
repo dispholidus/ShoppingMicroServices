@@ -51,7 +51,7 @@ namespace ShoppingMicroservices.Controller.Api
             _servicesDbContext.Add(order);
             _servicesDbContext.SaveChanges();
 
-            return _notificationController.SendNotificationAsync(order);
+            return _notificationController.SendNotification(order);
         }
 
     }
