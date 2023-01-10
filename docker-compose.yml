@@ -6,9 +6,11 @@ services:
     build:
       context: .
     ports:
-      - "8080:3000"
+      - "3000:3000"
     networks:
       - apiapp-network
+    depends_on:
+      - sql
   sql:
     image: "mcr.microsoft.com/mssql/server:2019-latest"
     container_name: sql_server2019
@@ -16,7 +18,7 @@ services:
       - "1433:1433"
     environment:
       - ACCEPT_EULA=y
-      - SA_PASSWORD= $VeryComplexPassword123
+      - SA_PASSWORD=/1A2b3c4d
     networks:
       - apiapp-network
 networks:

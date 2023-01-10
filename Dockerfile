@@ -3,7 +3,7 @@
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 ENV PORT=3000
 WORKDIR /app
-EXPOSE $PORT
+EXPOSE 3000
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
@@ -19,4 +19,5 @@ RUN dotnet publish "ShoppingMicroservices.csproj" -c Release -o /app/publish /p:
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+ENV ASPNETCORE_URLS="http://*:3000"
 ENTRYPOINT ["dotnet", "ShoppingMicroservices.dll"]
