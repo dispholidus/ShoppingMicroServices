@@ -1,0 +1,24 @@
+﻿version: "3.9"
+services:
+  microservices:
+    image: "aspdotnetapp"
+    container_name: api_app
+    build:
+      context: .
+    ports:
+      - "8080:3000"
+    networks:
+      - apiapp-network
+  sql:
+    image: "mcr.microsoft.com/mssql/server:2019-latest"
+    container_name: sql_server2019
+    ports:
+      - "1433:1433"
+    environment:
+      - ACCEPT_EULA=y
+      - SA_PASSWORD=admin
+    networks:
+      - apiapp-network
+networks:
+  apiapp-network:
+    driver: bridge
