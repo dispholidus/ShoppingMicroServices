@@ -16,7 +16,7 @@ services:
       - "1433:1433"
     environment:
       - ACCEPT_EULA=y
-      - SA_PASSWORD=admin
+      - SA_PASSWORD= $VeryComplexPassword123
     networks:
       - apiapp-network
 networks:
